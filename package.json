@@ -1,0 +1,19 @@
+{
+  "name": "api-code-challenge",
+  "version": "1.0.0",
+  "description": "Challenge to wrap Githubs API",
+  "main": "app.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/NoxPhoenix/api-code-challenge.git"
+  },
+  "author": "Benjamin McClain",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/NoxPhoenix/api-code-challenge/issues"
+  },
+  "homepage": "https://github.com/NoxPhoenix/api-code-challenge#readme"
+}
