@@ -15,5 +15,13 @@
   "bugs": {
     "url": "https://github.com/NoxPhoenix/api-code-challenge/issues"
   },
-  "homepage": "https://github.com/NoxPhoenix/api-code-challenge#readme"
+  "homepage": "https://github.com/NoxPhoenix/api-code-challenge#readme",
+  "dependencies": {
+    "express": "^4.17.2"
+  },
+  "devDependencies": {
+    "eslint": "^8.2.0",
+    "eslint-config-airbnb-base": "^15.0.0",
+    "eslint-plugin-import": "^2.25.2"
+  }
 }
