@@ -1,0 +1,17 @@
+{
+  "extends": "../.eslintrc",
+  "env": {
+      "mocha": true
+  },
+  "globals": {
+      "chai": "readonly",
+      "expect": "readonly"
+  },
+  "rules": {
+      "func-names": 0,
+      "import/no-extraneous-dependencies": 0,
+      "no-unused-expressions": 0,
+      "prefer-arrow-callback": 0,
+      "promise/always-return": 0
+  }
+}
