@@ -5,9 +5,19 @@ const { it } = require('mocha');
 const config = require('../../config');
 const pullRequestSchema = require('./schemas/pullRequest');
 
-const makeRequest = (uri) => function () {
-  return got(`${config.targetUrl}:${config.port}/${uri}`, { responseType: 'json' })
+const makeRequest = (uri, overridingSearchParams = {}) => function () {
+  const requestOptions = {
+    responseType: 'json',
+    throwHttpErrors: false,
+    searchParams: {
+      url: 'https://github.com/colinhacks/zod',
+      ...overridingSearchParams,
+    },
+  };
+
+  return got(`${config.targetUrl}:${config.port}/${uri}`, requestOptions)
     .then((response) => {
+      this.response = response;
       this.responseBody = response.body;
     });
 };
@@ -29,10 +39,26 @@ const itBehavesLikeOpenPullRequestsHaveNumberOfCommitsProperty = () => (
   })
 );
 
+const itBehavesLikeItRespondsWithStatusCode = (statusCode) => (
+  it(`responds with ${statusCode} status code`, function () {
+    expect(this.response.statusCode).to.equal(statusCode);
+  })
+);
+
 describe('/api/pull-requests', function () {
   describe('/:repositoryUrl', function () {
-    before('make request', makeRequest('pull-requests/123'));
-    itBehavesLikeItRespondsWithPullRequestSchema();
-    itBehavesLikeOpenPullRequestsHaveNumberOfCommitsProperty();
+    context('when a valid url param is used', function () {
+      before('make request', makeRequest('pull-requests/'));
+      itBehavesLikeItRespondsWithPullRequestSchema();
+      itBehavesLikeOpenPullRequestsHaveNumberOfCommitsProperty();
+    });
+    context.only('when an invalid url format is used', function () {
+      before('make request', makeRequest('pull-requests/', { url: 'INVALID URL' }));
+      itBehavesLikeItRespondsWithStatusCode(400);
+      it('contains error message warning about proper url param', function () {
+        const errorMessage = 'Required query param: url is in invalid format. Use \'https://github.com/<user>/<repoName>\'';
+        expect(this.responseBody).to.have.property('message', errorMessage);
+      });
+    });
   });
 });
