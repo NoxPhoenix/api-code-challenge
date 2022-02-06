@@ -32,7 +32,6 @@ const itBehavesLikeItRespondsWithPullRequestSchema = () => (
 
 const itBehavesLikeOpenPullRequestsHaveNumberOfCommitsProperty = () => (
   it('has numberOfCommits property if pull request state is open', function () {
-    console.log(this.responseBody);
     this.responseBody.data.map(({ state, numberOfCommits = null }) => {
       if (state === 'open') return expect(numberOfCommits).to.be.a('number');
       return expect(numberOfCommits.to.be.null);
