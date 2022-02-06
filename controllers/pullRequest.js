@@ -8,6 +8,7 @@ const MissingParamError = require('../middleware/errorClasses/missingParamError'
 const responseFields = [
   'title',
   'number',
+  'state',
   'numberOfCommits',
 ];
 

@@ -26,7 +26,7 @@ const itBehavesLikeItRespondsWithPullRequestSchema = () => (
   it('responds with all items matching pullRequest schema', function () {
     expect(this.responseBody).to.have.property('data')
       .that.is.an('array')
-      .that.all.are.jsonSchema(pullRequestSchema);
+      .all.to.be.jsonSchema(pullRequestSchema);
   })
 );
 
@@ -34,7 +34,7 @@ const itBehavesLikeOpenPullRequestsHaveNumberOfCommitsProperty = () => (
   it('has numberOfCommits property if pull request state is open', function () {
     this.responseBody.data.map(({ state, numberOfCommits = null }) => {
       if (state === 'open') return expect(numberOfCommits).to.be.a('number');
-      return expect(numberOfCommits.to.be.null);
+      return expect(numberOfCommits).to.be.null;
     });
   })
 );
