@@ -1,7 +1,7 @@
 const PullRequestRouter = require('./pullRequest');
 
 const Router = (app) => {
-  app.use('/pull-requests', PullRequestRouter);
+  app.use('/api/pull-requests', PullRequestRouter);
 };
 
 module.exports = Router;

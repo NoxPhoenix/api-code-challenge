@@ -48,12 +48,12 @@ const itBehavesLikeItRespondsWithStatusCode = (statusCode) => (
 describe('/api/pull-requests', function () {
   describe('/:repositoryUrl', function () {
     context('when a valid url param is used', function () {
-      before('make request', makeRequest('pull-requests/'));
+      before('make request', makeRequest('api/pull-requests/'));
       itBehavesLikeItRespondsWithPullRequestSchema();
       itBehavesLikeOpenPullRequestsHaveNumberOfCommitsProperty();
     });
-    context.only('when an invalid url format is used', function () {
-      before('make request', makeRequest('pull-requests/', { url: 'INVALID URL' }));
+    context('when an invalid url format is used', function () {
+      before('make request', makeRequest('api/pull-requests/', { url: 'INVALID URL' }));
       itBehavesLikeItRespondsWithStatusCode(400);
       it('contains error message warning about proper url param', function () {
         const errorMessage = 'Required query param: url is in invalid format. Use \'https://github.com/<user>/<repoName>\'';
