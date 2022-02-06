@@ -3,6 +3,7 @@ const _ = require('lodash');
 const mapOpenPullRequestsNumberOfCommitsService = require('../services/mapOpenPullRequestsCommits');
 const RateLimitExceededError = require('../middleware/errorClasses/rateLimitError');
 const InvalidUrlError = require('../middleware/errorClasses/invalidUrlError');
+const MissingParamError = require('../middleware/errorClasses/missingParamError');
 
 const responseFields = [
   'title',
@@ -23,6 +24,7 @@ const serializeResponse = (pullRequests = []) => (
 
 const pullRequestController = {
   async list (req, res, next) {
+    if (!req.query.url) return next(new MissingParamError('url'));
     const sanitizedRepositoryUrl = SanitizeUrlParam(req.query.url);
     if (!sanitizedRepositoryUrl) return next(new InvalidUrlError());
 

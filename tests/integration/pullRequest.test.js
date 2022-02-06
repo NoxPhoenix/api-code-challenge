@@ -5,14 +5,14 @@ const { it } = require('mocha');
 const config = require('../../config');
 const pullRequestSchema = require('./schemas/pullRequest');
 
-const makeRequest = (uri, overridingSearchParams = {}) => function () {
+const makeRequest = (uri, options = {}) => function () {
   const requestOptions = {
     responseType: 'json',
     throwHttpErrors: false,
     searchParams: {
       url: 'https://github.com/colinhacks/zod',
-      ...overridingSearchParams,
     },
+    ...options,
   };
 
   return got(`${config.targetUrl}:${config.port}/${uri}`, requestOptions)
@@ -32,6 +32,7 @@ const itBehavesLikeItRespondsWithPullRequestSchema = () => (
 
 const itBehavesLikeOpenPullRequestsHaveNumberOfCommitsProperty = () => (
   it('has numberOfCommits property if pull request state is open', function () {
+    console.log(this.responseBody);
     this.responseBody.data.map(({ state, numberOfCommits = null }) => {
       if (state === 'open') return expect(numberOfCommits).to.be.a('number');
       return expect(numberOfCommits.to.be.null);
@@ -53,10 +54,18 @@ describe('/api/pull-requests', function () {
       itBehavesLikeOpenPullRequestsHaveNumberOfCommitsProperty();
     });
     context('when an invalid url format is used', function () {
-      before('make request', makeRequest('api/pull-requests/', { url: 'INVALID URL' }));
+      before('make request', makeRequest('api/pull-requests/', { searchParams: { url: 'INVALID URL' } }));
       itBehavesLikeItRespondsWithStatusCode(400);
       it('contains error message warning about proper url param', function () {
         const errorMessage = 'Required query param: url is in invalid format. Use \'https://github.com/<user>/<repoName>\'';
+        expect(this.responseBody).to.have.property('message', errorMessage);
+      });
+    });
+    context('when request is missing url query param', function () {
+      before('make request', makeRequest('api/pull-requests/', { searchParams: {} }));
+      itBehavesLikeItRespondsWithStatusCode(400);
+      it('contains error message warning about proper url param', function () {
+        const errorMessage = 'Missing required query param: url';
         expect(this.responseBody).to.have.property('message', errorMessage);
       });
     });
